@@ -1,0 +1,17 @@
+diff --git a/node_modules/react-native-sound/sound.js b/node_modules/react-native-sound/sound.js
+index c9bcbaf..06922a1 100644
+--- a/node_modules/react-native-sound/sound.js
++++ b/node_modules/react-native-sound/sound.js
+@@ -1,10 +1,10 @@
+ 'use strict';
+-
++import { Image } from 'react-native';
+ var ReactNative = require('react-native');
+ var RNSound = ReactNative.NativeModules.RNSound;
+ var IsAndroid = RNSound.IsAndroid;
+ var IsWindows = RNSound.IsWindows;
+-var resolveAssetSource = require("react-native/Libraries/Image/resolveAssetSource");
++var resolveAssetSource = Image.resolveAssetSource;
+ var eventEmitter = new ReactNative.NativeEventEmitter(RNSound);
+ 
+ var nextKey = 0;

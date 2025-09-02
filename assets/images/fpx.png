@@ -1,0 +1,4 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="40" height="20" viewBox="0 0 40 20">
+  <rect width="40" height="20" fill="#F5F5F5" rx="3" />
+  <text x="20" y="14" font-family="Arial" font-size="10" fill="#00529B" text-anchor="middle" font-weight="bold">FPX</text>
+</svg>

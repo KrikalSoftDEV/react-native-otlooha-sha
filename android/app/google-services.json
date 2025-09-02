@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "1029367058422",
+    "project_id": "waqaf-an-nur-c4e20",
+    "storage_bucket": "waqaf-an-nur-c4e20.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1029367058422:android:566edb5786e4994544c1d7",
+        "android_client_info": {
+          "package_name": "com.wan.waqaf360"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1029367058422-se7e45a510l06tprgq774r0bcfis1c4g.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.wan.waqaf360",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "1029367058422-1n5lple5fqtcb3opp2u3jmg9e99lojm3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCXYl7bbJbM84xLzV5QTwNrFGU8qjs4Ge0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1029367058422-1n5lple5fqtcb3opp2u3jmg9e99lojm3.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1029367058422-5hnrss01ob35p5252t2k4qco7pgurnn1.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.wan.waqaf360"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,212 @@
+{
+    "events": [
+      {
+        "id": "evt_001",
+        "title": "Elderly Care Program of Nur Ehsan",
+        "description": "The Nur Ehsan Elderly Care Program offers free, holistic support to seniors through day-care clubs, home visits, and digital literacy training. It aims to empower the elderly, promote active ageing, and reduce isolation by providing social, physical, and emotional care in a community setting.",
+        "type": "offline",
+        "category": "healthcare",
+        "tags": ["elderly-care", "community-support", "health", "social-care"],
+        "status": "active",
+        "registration_status": "participated",
+        "organizer": {
+          "name": "Nur Ehsan Foundation",
+          "email": "info@nurehsan.org",
+          "phone": "+60-123-456-789",
+          "website": "https://nurehsan.org"
+        },
+        "schedule": {
+          "start_date": "2025-06-28T09:00:00Z",
+          "end_date": "2025-07-15T17:00:00Z",
+          "timezone": "Asia/Kuala_Lumpur",
+          "duration_days": 18,
+          "recurring": false
+        },
+        "location": {
+          "venue_name": "Garden Hotel",
+          "address": "29 Jalan Jenang, Batu Pahat, Johor 83000",
+          "city": "Batu Pahat",
+          "state": "Johor",
+          "country": "Malaysia",
+          "postal_code": "83000",
+          "coordinates": {
+            "latitude": 1.8542,
+            "longitude": 102.9329
+          },
+          "map_url": "https://maps.google.com/?q=29+Jalan+Jenang+Batu+Pahat"
+        },
+        "online_details": null,
+        "capacity": {
+          "max_participants": 100,
+          "current_registered": 45,
+          "available_spots": 55
+        },
+        "registration": {
+          "required": true,
+          "deadline": "2025-06-25T23:59:59Z",
+          "fee": 0,
+          "currency": "MYR",
+          "registration_url": "https://nurehsan.org/register/elderly-care-2025"
+        },
+        "media": {
+          "featured_image": "https://example.com/images/elderly-care-main.jpg",
+          "gallery": [
+            "https://example.com/images/elderly-care-1.jpg",
+            "https://example.com/images/elderly-care-2.jpg"
+          ],
+          "video_url": null
+        },
+        "created_at": "2025-05-15T10:30:00Z",
+        "updated_at": "2025-06-10T14:20:00Z"
+      },
+      {
+        "id": "evt_002",
+        "title": "Digital Wellness Workshop for Seniors",
+        "description": "Join our interactive online workshop designed to help seniors navigate digital tools safely and confidently. Learn about online safety, video calling, and staying connected with family through technology.",
+        "type": "online",
+        "category": "education",
+        "tags": ["digital-literacy", "seniors", "technology", "online-safety"],
+        "status": "upcoming",
+        "registration_status": "open",
+        "organizer": {
+          "name": "Tech for All Malaysia",
+          "email": "workshops@techforall.my",
+          "phone": "+60-987-654-321",
+          "website": "https://techforall.my"
+        },
+        "schedule": {
+          "start_date": "2025-07-20T14:00:00Z",
+          "end_date": "2025-07-20T16:00:00Z",
+          "timezone": "Asia/Kuala_Lumpur",
+          "duration_hours": 2,
+          "recurring": true,
+          "recurrence_pattern": "weekly"
+        },
+        "location": null,
+        "online_details": {
+          "platform": "Zoom",
+          "meeting_id": "123-456-7890",
+          "passcode": "Senior2025",
+          "join_url": "https://zoom.us/j/1234567890?pwd=abcd1234",
+          "dial_in_numbers": [
+            {
+              "country": "Malaysia",
+              "number": "+60-3-9212-6888"
+            }
+          ],
+          "requirements": {
+            "device": "Computer, tablet, or smartphone",
+            "internet": "Stable internet connection required",
+            "software": "Zoom app (will be provided installation guide)"
+          }
+        },
+        "capacity": {
+          "max_participants": 50,
+          "current_registered": 12,
+          "available_spots": 38
+        },
+        "registration": {
+          "required": true,
+          "deadline": "2025-07-19T12:00:00Z",
+          "fee": 0,
+          "currency": "MYR",
+          "registration_url": "https://techforall.my/register/seniors-workshop"
+        },
+        "media": {
+          "featured_image": "https://example.com/images/digital-workshop.jpg",
+          "gallery": [],
+          "video_url": "https://youtube.com/watch?v=sample-intro"
+        },
+        "created_at": "2025-06-01T09:15:00Z",
+        "updated_at": "2025-06-12T11:45:00Z"
+      },
+      {
+        "id": "evt_003",
+        "title": "Hybrid Health & Wellness Summit",
+        "description": "A comprehensive summit focusing on health and wellness for all ages, featuring both in-person and virtual participation options. Expert speakers, interactive workshops, and networking opportunities.",
+        "type": "hybrid",
+        "category": "health",
+        "tags": ["health", "wellness", "summit", "networking", "hybrid"],
+        "status": "upcoming",
+        "registration_status": "early_bird",
+        "organizer": {
+          "name": "Malaysia Health Association",
+          "email": "events@healthmy.org",
+          "phone": "+60-555-123-456",
+          "website": "https://healthmy.org"
+        },
+        "schedule": {
+          "start_date": "2025-08-15T08:00:00Z",
+          "end_date": "2025-08-17T18:00:00Z",
+          "timezone": "Asia/Kuala_Lumpur",
+          "duration_days": 3,
+          "recurring": false
+        },
+        "location": {
+          "venue_name": "Kuala Lumpur Convention Centre",
+          "address": "Kuala Lumpur City Centre, 50088 Kuala Lumpur",
+          "city": "Kuala Lumpur",
+          "state": "Federal Territory",
+          "country": "Malaysia",
+          "postal_code": "50088",
+          "coordinates": {
+            "latitude": 3.1527,
+            "longitude": 101.7127
+          },
+          "map_url": "https://maps.google.com/?q=KLCC+Kuala+Lumpur"
+        },
+        "online_details": {
+          "platform": "Custom Platform + YouTube Live",
+          "streaming_url": "https://healthmy.org/live-summit-2025",
+          "chat_enabled": true,
+          "q_and_a_sessions": true,
+          "requirements": {
+            "device": "Any device with internet browser",
+            "internet": "Stable internet connection for HD streaming",
+            "software": "Modern web browser (Chrome, Firefox, Safari, Edge)"
+          }
+        },
+        "capacity": {
+          "max_participants": {
+            "in_person": 500,
+            "online": 2000
+          },
+          "current_registered": {
+            "in_person": 234,
+            "online": 567
+          },
+          "available_spots": {
+            "in_person": 266,
+            "online": 1433
+          }
+        },
+        "registration": {
+          "required": true,
+          "deadline": "2025-08-10T23:59:59Z",
+          "fee": {
+            "in_person": {
+              "early_bird": 150,
+              "regular": 200
+            },
+            "online": {
+              "early_bird": 50,
+              "regular": 75
+            }
+          },
+          "currency": "MYR",
+          "registration_url": "https://healthmy.org/summit-2025-register"
+        },
+        "media": {
+          "featured_image": "https://example.com/images/health-summit.jpg",
+          "gallery": [
+            "https://example.com/images/summit-speakers.jpg",
+            "https://example.com/images/summit-venue.jpg"
+          ],
+          "video_url": "https://youtube.com/watch?v=summit-2025-trailer"
+        },
+        "created_at": "2025-04-20T16:00:00Z",
+        "updated_at": "2025-06-13T10:30:00Z"
+      }
+    ]
+ 
+  }
