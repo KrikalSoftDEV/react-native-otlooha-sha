@@ -78,7 +78,7 @@ const AsatizahAIScreen = () => {
       <View style={{ flex: 1 }}>
         <WebView
           ref={webviewRef}
-          source={{ uri: "https://app.quranflash.com/book/Medina1?en#/reader/chapter/3" }}
+          source={{ uri: "https://app.quranflash.com/book/Warsh1?en#/reader/chapter/3" }}
           style={{ flex: 1 }}
           onLoadEnd={() => setLoaded(true)}
         />

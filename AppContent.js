@@ -67,6 +67,8 @@ import WorshipPlaces from './screens/worshipPlaces/WorshipPlaces';
 
 import HelpAndSupport from './screens/home/HelpAndSupport';
 
+import RecitationDetailsScreen from './screens/query/RecitationDetailsScreen';
+
 const Stack = createNativeStackNavigator();
 
 
@@ -92,7 +94,8 @@ function OnboardingStack() {
             <Stack.Screen name="ProfileAuth" component={ProfileAuth} />
 
 
-      <Stack.Screen name="QueryTable" component={QueryTable} />
+          <Stack.Screen name="QueryTable" component={QueryTable} />
+          <Stack.Screen name="RecitationDetails" component={RecitationDetailsScreen} />
 
       <Stack.Screen name="Quran" component={QuranScreen} />
       <Stack.Screen name="Asatizah AI" component={AsatizahAIScreen} />

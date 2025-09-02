@@ -16,7 +16,7 @@ import RNFetchBlob from 'rn-fetch-blob';
 
 const audioRecorderPlayer = new AudioRecorderPlayer();
 
-const RecitationList = ({ navigation }) => {
+const RecitationList = () => {
   const [recitations, setRecitations] = useState([]);
   const [loading, setLoading] = useState(false);
   const [refreshingRequested, setRefreshingRequested] = useState(false);
@@ -62,9 +62,6 @@ const RecitationList = ({ navigation }) => {
         {headers: {Authorization: `Bearer ${token}`}},
       );
       const json = await res.json();
-
-
-      console.log('Fetched recitations:', json);
       if (json.data && Array.isArray(json.data)) {
         setRecitations(json.data);
       } else {
@@ -77,6 +74,7 @@ const RecitationList = ({ navigation }) => {
     setLoading(false);
   };
 
+  // Separate refresh handlers for each tab:
   const onRefreshRequested = async () => {
     setRefreshingRequested(true);
     await fetchRecitations();
@@ -88,14 +86,15 @@ const RecitationList = ({ navigation }) => {
     await fetchRecitations();
     setRefreshingResponded(false);
   };
-
   const filterRecitations = () => {
     if (!recitations.length) return [];
     if (selectedTab === 'Requested') {
+      // Include statuses for requested tab; exclude 'Reviewed'
       return recitations.filter(r =>
         ['Pending', 'Waiting', 'Re-recorded'].includes(r.status),
       );
     } else {
+      // Include both Responded and Reviewed as responded tab entries
       return recitations.filter(r =>
         ['Responded', 'Reviewed'].includes(r.status),
       );
@@ -179,14 +178,6 @@ const RecitationList = ({ navigation }) => {
     }
   };
 
-  const handleCardPress = (item) => {
-
-    console.log( item, 'Card pressed item details');
-    if (selectedTab === 'Responded' && navigation) {
-      navigation.navigate('RecitationDetails', { item });
-    }
-  };
-
   const renderItem = ({item}) => {
     const id = item._id ?? String(item.id) ?? Math.random().toString();
     const isRecording = recordingId === id;
@@ -199,14 +190,8 @@ const RecitationList = ({ navigation }) => {
       ? item.audioText.join(' ')
       : item.audioText;
 
-    const CardWrapper = selectedTab === 'Responded' ? TouchableOpacity : View;
-
     return (
-      <CardWrapper 
-        style={styles.card} 
-        onPress={() => handleCardPress(item)}
-        activeOpacity={selectedTab === 'Responded' ? 0.7 : 1}
-      >
+      <View style={styles.card}>
         <View style={styles.headerRow}>
           <Text style={styles.chapter}>Recitation ID. {item.chapterNo}</Text>
           <View
@@ -215,7 +200,7 @@ const RecitationList = ({ navigation }) => {
               (item.status === 'Pending' || item.status === 'Waiting') &&
                 styles.waitingBadge,
               item.status === 'Re-recorded' && styles.rerecordBadge,
-              (item.status === 'Responded' || item.status === 'Reviewed') && styles.respondedBadge,
+              item.status === 'Responded' && styles.respondedBadge,
             ]}>
             <Text style={styles.badgeText}>{item.status}</Text>
           </View>
@@ -238,29 +223,27 @@ const RecitationList = ({ navigation }) => {
             </TouchableOpacity>
           )}
         </View>
-        {selectedTab === 'Requested' && (
-          <View style={styles.actionsRow}>
-            {item.voiceFile && item.voiceFile.length ? (
-              <TouchableOpacity
-                style={styles.playButton}
-                onPress={() => downloadAndPlay(item.voiceFile, id)}>
-                <Text style={styles.playText}>
-                  {playingVoiceId === id ? 'Stop' : 'Play'}
-                </Text>
-              </TouchableOpacity>
-            ) : null}
-            {recorded ? (
-              <TouchableOpacity
-                style={styles.playRecorded}
-                onPress={() => playRecorded(recorded, id)}>
-                <Text style={styles.playText}>
-                  {playingRecordedId === id ? 'Stop' : 'Play Yours'}
-                </Text>
-              </TouchableOpacity>
-            ) : null}
-          </View>
-        )}
-      </CardWrapper>
+        <View style={styles.actionsRow}>
+          {item.voiceFile && item.voiceFile.length ? (
+            <TouchableOpacity
+              style={styles.playButton}
+              onPress={() => downloadAndPlay(item.voiceFile, id)}>
+              <Text style={styles.playText}>
+                {playingVoiceId === id ? 'Stop' : 'Play'}
+              </Text>
+            </TouchableOpacity>
+          ) : null}
+          {recorded ? (
+            <TouchableOpacity
+              style={styles.playRecorded}
+              onPress={() => playRecorded(recorded, id)}>
+              <Text style={styles.playText}>
+                {playingRecordedId === id ? 'Stop' : 'Play Yours'}
+              </Text>
+            </TouchableOpacity>
+          ) : null}
+        </View>
+      </View>
     );
   };
 

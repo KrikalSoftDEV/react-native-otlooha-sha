@@ -126,7 +126,7 @@ const ProfileAbout = props => {
 
 
 
-      <Text style={styles.mainHeading}>Otlooha Sha is a groundbreaking virtual university that connects teachers and students from around the world who are passionate about learning the Qur’an, Tajweed, and the Arabic language. What makes Otlooha Sha truly unique is its innovative approach—rather than relying on third-party video conferencing tools, it is powered entirely by its own purpose-built platforms and applications, specially designed to create a seamless and enriching learning experience.</Text>
+      <Text style={styles.mainHeading}>Otlooha Sah is a groundbreaking virtual university that connects teachers and students from around the world who are passionate about learning the Qur’an, Tajweed, and the Arabic language. What makes Otlooha Sah truly unique is its innovative approach—rather than relying on third-party video conferencing tools, it is powered entirely by its own purpose-built platforms and applications, specially designed to create a seamless and enriching learning experience.</Text>
         {/* <Text style={styles.paragraph}>
         </Text>
 

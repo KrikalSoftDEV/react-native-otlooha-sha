@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import {
   ActivityIndicator,
   Alert,
+  Image,
   StyleSheet,
   Text,
   TextInput,
@@ -76,7 +77,7 @@ const Signup_2 = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.title}  >Welcome to Otlooha</Text>
+      <Text style={styles.title}  >Welcome to Otlooha Sah</Text>
       <Text style={styles.subtitle}>Connect, learn, and grow together</Text>
 
       <View style={styles.tabContainer}>
@@ -97,13 +98,29 @@ const Signup_2 = () => {
           <Text style={styles.roleIcon}>🎓</Text>
           <Text style={styles.roleText}>I’m a Student</Text>
         </TouchableOpacity>
-        <TouchableOpacity
+        {/* <TouchableOpacity
           style={[styles.roleBox, role === 'teacher' && styles.selectedRole]}
           onPress={() => setRole('teacher')}
         >
           <Text style={styles.roleIcon}>👨‍🏫</Text>
           <Text style={styles.roleText}>I’m a Teacher</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
+
+
+
+
+         <TouchableOpacity
+            style={[styles.roleBox, role === 'teacher' && styles.selectedRole]}
+            onPress={() => setRole('teacher')}
+          >
+            {/* Replace emoji with Islamic teacher image */}
+            <Image
+              source={require('../../assets/images/teacher.png')} // Ensure you have this image in your assets
+              resizeMode="contain"
+              style={{ width: 40, height: 40, marginBottom: 8 }}
+            />
+            <Text style={styles.roleText}>I’m a Teacher</Text>
+          </TouchableOpacity>
       </View>
       <View style={styles.formBox}>
         <View style={styles.row}>

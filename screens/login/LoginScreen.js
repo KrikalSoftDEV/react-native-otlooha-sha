@@ -2,11 +2,12 @@ import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
 import {
   Alert,
+  Image,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
-  View,
+  View
 } from 'react-native';
 
 import { useDispatch, useSelector } from 'react-redux';
@@ -154,7 +155,7 @@ const loginHandle = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.title}>Welcome to Otlooha</Text>
+      <Text style={styles.title}>Welcome to Otlooha Sah</Text>
       <Text style={styles.subtitle}>Connect, learn, and grow together</Text>
 
       {/* Tabs */}
@@ -173,22 +174,32 @@ const loginHandle = () => {
       </View>
 
       {/* Role Buttons */}
-      <View style={styles.roleContainer}>
-        <TouchableOpacity
-          style={[styles.roleBox, role === 'user' && styles.selectedRole]}
-          onPress={() => setRole('user')}
-        >
-          <Text style={styles.roleIcon}>🎓</Text>
-          <Text style={styles.roleText}>I’m a Student</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.roleBox, role === 'teacher' && styles.selectedRole]}
-          onPress={() => setRole('teacher')}
-        >
-          <Text style={styles.roleIcon}>👨‍🏫</Text>
-          <Text style={styles.roleText}>I’m a Teacher</Text>
-        </TouchableOpacity>
-      </View>
+
+
+
+
+<View style={styles.roleContainer}>
+  <TouchableOpacity
+    style={[styles.roleBox, role === 'user' && styles.selectedRole]}
+    onPress={() => setRole('user')}
+  >
+    <Text style={styles.roleIcon}>🎓</Text>
+    <Text style={styles.roleText}>I’m a Student</Text>
+  </TouchableOpacity>
+  <TouchableOpacity
+    style={[styles.roleBox, role === 'teacher' && styles.selectedRole]}
+    onPress={() => setRole('teacher')}
+  >
+    {/* Replace emoji with Islamic teacher image */}
+    <Image
+      source={require('../../assets/images/teacher.png')} // Ensure you have this image in your assets
+      resizeMode="contain"
+      style={{ width: 40, height: 40, marginBottom: 8 }}
+    />
+    <Text style={styles.roleText}>I’m a Teacher</Text>
+  </TouchableOpacity>
+</View>
+      
 
       {/* Login Form */}
       <View style={styles.formBox}>
