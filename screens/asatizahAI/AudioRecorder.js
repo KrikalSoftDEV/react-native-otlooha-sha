@@ -205,7 +205,7 @@ const AudioRecorderUI = forwardRef(({ description, setDescription, chapterNo, pa
 
   return (
     <View style={styles.wrapper}>
-      <Text style={styles.descriptionLabel}>Description</Text>
+      <Text style={styles.descriptionLabel}>Remark</Text>
       <TextInput
         style={styles.input}
         placeholder="Type a message"
@@ -296,7 +296,7 @@ const styles = StyleSheet.create({
     borderColor: "#a1b050",
   },
   recordingButton: {
-    backgroundColor: "#6c8029",
+    backgroundColor: "red",
     borderColor: "#4b6319",
   },
   playingButton: {

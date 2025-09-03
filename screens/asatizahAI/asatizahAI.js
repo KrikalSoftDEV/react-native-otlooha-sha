@@ -1,6 +1,7 @@
 import React, { useLayoutEffect, useRef, useState } from "react";
 import {
   Alert,
+  Image,
   Modal,
   SafeAreaView,
   StyleSheet,
@@ -87,7 +88,13 @@ const AsatizahAIScreen = () => {
           style={styles.absoluteButton}
           onPress={() => setModalVisible(true)}
         >
-          <Text style={styles.absoluteButtonText}>Start Recitation</Text>
+
+
+      <Image
+           source={require('../../assets/images/recordmain.jpeg')} // Ensure you have this image in your assets
+           resizeMode="contain"
+           style={{ width: 60, height: 60, marginBottom: 8 }}
+         />
         </TouchableOpacity>
 
         <Modal
@@ -157,13 +164,11 @@ const styles = StyleSheet.create({
   absoluteButton: {
     position: "absolute",
     top: 30,
-    right: 25,
-    backgroundColor: "#6c8029",
+    right: 0,
     paddingVertical: 16,
     paddingHorizontal: 24,
     borderRadius: 28,
     zIndex: 100,
-    elevation: 12,
   },
   absoluteButtonText: {
     color: "#fff",
@@ -235,6 +240,8 @@ const styles = StyleSheet.create({
     fontSize: 18,
     textAlign: "center",
   },
+
+  
 });
 
 export default AsatizahAIScreen;
