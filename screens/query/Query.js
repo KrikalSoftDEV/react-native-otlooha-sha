@@ -16,7 +16,7 @@ import RNFetchBlob from 'rn-fetch-blob';
 
 const audioRecorderPlayer = new AudioRecorderPlayer();
 
-const RecitationList = ({ navigation }) => {
+const RecitationList = ({navigation}) => {
   const [recitations, setRecitations] = useState([]);
   const [loading, setLoading] = useState(false);
   const [refreshingRequested, setRefreshingRequested] = useState(false);
@@ -62,7 +62,6 @@ const RecitationList = ({ navigation }) => {
         {headers: {Authorization: `Bearer ${token}`}},
       );
       const json = await res.json();
-
 
       console.log('Fetched recitations:', json);
       if (json.data && Array.isArray(json.data)) {
@@ -179,15 +178,17 @@ const RecitationList = ({ navigation }) => {
     }
   };
 
-  const handleCardPress = (item) => {
-
-    console.log( item, 'Card pressed item details');
+  const handleCardPress = item => {
+    console.log(item, 'Card pressed item details');
     if (selectedTab === 'Responded' && navigation) {
-      navigation.navigate('RecitationDetails', { item });
+      navigation.navigate('RecitationDetails', {item});
     }
   };
 
   const renderItem = ({item}) => {
+
+
+    console.log(item, "item renderItem")
     const id = item._id ?? String(item.id) ?? Math.random().toString();
     const isRecording = recordingId === id;
     const recorded = recordedFilePaths[id];
@@ -202,24 +203,34 @@ const RecitationList = ({ navigation }) => {
     const CardWrapper = selectedTab === 'Responded' ? TouchableOpacity : View;
 
     return (
-      <CardWrapper 
-        style={styles.card} 
+      <CardWrapper
+        style={styles.card}
         onPress={() => handleCardPress(item)}
-        activeOpacity={selectedTab === 'Responded' ? 0.7 : 1}
-      >
+        activeOpacity={selectedTab === 'Responded' ? 0.7 : 1}>
         <View style={styles.headerRow}>
-          <Text style={styles.chapter}>Recitation ID. {item.chapterNo}</Text>
+          <Text style={styles.chapter}>Recitation ID. 1</Text>
+
           <View
             style={[
               styles.badge,
               (item.status === 'Pending' || item.status === 'Waiting') &&
                 styles.waitingBadge,
               item.status === 'Re-recorded' && styles.rerecordBadge,
-              (item.status === 'Responded' || item.status === 'Reviewed') && styles.respondedBadge,
+              (item.status === 'Responded' || item.status === 'Reviewed') &&
+                styles.respondedBadge,
             ]}>
             <Text style={styles.badgeText}>{item.status}</Text>
           </View>
         </View>
+
+        <View>
+          <Text style={styles.chapter}>Surah Number : {item.chapterNo}</Text>
+        </View>
+
+         <View>
+          <Text style={styles.chapter}>Line Number : {item.pageNo}</Text>
+        </View>
+
         <Text style={styles.surahName}>{audioTextStr}</Text>
         {selectedTab === 'Responded' && item.teacherFeedback ? (
           <Text style={styles.feedback}>

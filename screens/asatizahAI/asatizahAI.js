@@ -110,13 +110,14 @@ const AsatizahAIScreen = () => {
               <Text style={styles.label}>Recitation number</Text>
               <Text style={styles.recitationNumber}>1</Text>
 
-              <Text style={styles.label}>Surah name</Text>
+              <Text style={styles.label}>Surah number</Text>
               <TextInput
                 style={styles.input}
                 value={surahName}
                 onChangeText={setSurahName}
-                placeholder="Surah name"
+                placeholder="Surah number"
                 placeholderTextColor="#999"
+               
                 returnKeyType="done"
               />
 
