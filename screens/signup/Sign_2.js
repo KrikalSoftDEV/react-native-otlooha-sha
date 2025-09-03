@@ -44,7 +44,7 @@ const Signup_2 = () => {
         'http://31.97.206.49:3001/api/user/register',
         {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {'Content-Type': 'application/json'},
           body: JSON.stringify({
             email,
             password,
@@ -63,7 +63,8 @@ const Signup_2 = () => {
         Alert.alert('Success', 'Account created successfully', [
           {
             text: 'OK',
-            onPress: () => navigation.navigate('email_submit_screen', { email , role}),
+            onPress: () =>
+              navigation.navigate('email_submit_screen', {email, role}),
           },
         ]);
       } else {
@@ -77,24 +78,27 @@ const Signup_2 = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.title}  >Welcome to Otlooha Sah</Text>
+      <Text style={styles.title}>Welcome to Otlooha Sah</Text>
       <Text style={styles.subtitle}>Connect, learn, and grow together</Text>
 
       <View style={styles.tabContainer}>
-              <TouchableOpacity style={styles.inactiveTab}>
-                <Text style={styles.inactiveTabText} onPress={() => navigation.navigate('Login')}>Login</Text>
-              </TouchableOpacity>
-              <TouchableOpacity  style={styles.activeTab}>
-                <Text style={styles.activeTabText}>Sign Up</Text>
-              </TouchableOpacity>
-            </View>
+        <TouchableOpacity style={styles.inactiveTab}>
+          <Text
+            style={styles.inactiveTabText}
+            onPress={() => navigation.navigate('Login')}>
+            Login
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.activeTab}>
+          <Text style={styles.activeTabText}>Sign Up</Text>
+        </TouchableOpacity>
+      </View>
 
       {/* Role Selection */}
       <View style={styles.roleContainer}>
         <TouchableOpacity
           style={[styles.roleBox, role === 'user' && styles.selectedRole]}
-          onPress={() => setRole('user')}
-        >
+          onPress={() => setRole('user')}>
           <Text style={styles.roleIcon}>🎓</Text>
           <Text style={styles.roleText}>I’m a Student</Text>
         </TouchableOpacity>
@@ -106,21 +110,17 @@ const Signup_2 = () => {
           <Text style={styles.roleText}>I’m a Teacher</Text>
         </TouchableOpacity> */}
 
-
-
-
-         <TouchableOpacity
-            style={[styles.roleBox, role === 'teacher' && styles.selectedRole]}
-            onPress={() => setRole('teacher')}
-          >
-            {/* Replace emoji with Islamic teacher image */}
-            <Image
-              source={require('../../assets/images/teacher.png')} // Ensure you have this image in your assets
-              resizeMode="contain"
-              style={{ width: 40, height: 40, marginBottom: 8 }}
-            />
-            <Text style={styles.roleText}>I’m a Teacher</Text>
-          </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.roleBox, role === 'teacher' && styles.selectedRole]}
+          onPress={() => setRole('teacher')}>
+          {/* Replace emoji with Islamic teacher image */}
+          <Image
+            source={require('../../assets/images/teacher.png')} // Ensure you have this image in your assets
+            resizeMode="contain"
+            style={{width: 40, height: 40, marginBottom: 8}}
+          />
+          <Text style={styles.roleText}>I’m a Teacher</Text>
+        </TouchableOpacity>
       </View>
       <View style={styles.formBox}>
         <View style={styles.row}>
@@ -184,8 +184,7 @@ const Signup_2 = () => {
             onChangeText={setConfirmPassword}
           />
           <TouchableOpacity
-            onPress={() => setHideConfirmPass(!hideConfirmPass)}
-          >
+            onPress={() => setHideConfirmPass(!hideConfirmPass)}>
             <Icon
               name={hideConfirmPass ? 'eye-off-outline' : 'eye-outline'}
               size={20}
@@ -207,8 +206,7 @@ const Signup_2 = () => {
         Already have an account?{' '}
         <Text
           style={styles.signupLink}
-          onPress={() => navigation.navigate('Login')}
-        >
+          onPress={() => navigation.navigate('Login')}>
           Login
         </Text>
       </Text>
@@ -217,7 +215,7 @@ const Signup_2 = () => {
 };
 export default Signup_2;
 const styles = StyleSheet.create({
-  container: { flex: 1, paddingHorizontal: 20, backgroundColor: '#F4F4F4' },
+  container: {flex: 1, paddingHorizontal: 20, backgroundColor: '#F4F4F4'},
   title: {
     fontSize: 26,
     fontWeight: 'bold',
@@ -272,8 +270,8 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 2,
   },
-  roleIcon: { fontSize: 28, marginBottom: 8 },
-  roleText: { fontWeight: '600' },
+  roleIcon: {fontSize: 28, marginBottom: 8},
+  roleText: {fontWeight: '600'},
   formBox: {
     backgroundColor: '#fff',
     borderRadius: 16,
@@ -285,7 +283,7 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
 
-  label: { fontSize: 14, marginTop: 10, color: '#333' },
+  label: {fontSize: 14, marginTop: 10, color: '#333'},
   inputWrapper: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -295,9 +293,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     marginTop: 5,
   },
-  input: { flex: 1, height: 44, fontSize: 14, border: '2px solid black' },
-  hints: { marginTop: 8, marginBottom: 5 },
-  hint: { fontSize: 12, color: '#777' },
+  input: {flex: 1, height: 44, fontSize: 14, border: '2px solid black'},
+  hints: {marginTop: 8, marginBottom: 5},
+  hint: {fontSize: 12, color: '#777'},
   loginBtn: {
     backgroundColor: '#6c8029',
     borderRadius: 10,
@@ -324,8 +322,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
   },
 
-
-   activeTab: {
+  activeTab: {
     backgroundColor: '#6c8029',
     borderRadius: 8,
     paddingVertical: 10,
@@ -344,7 +341,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 
-   tabContainer: {
+  tabContainer: {
     flexDirection: 'row',
     backgroundColor: '#fff',
     borderRadius: 12,
