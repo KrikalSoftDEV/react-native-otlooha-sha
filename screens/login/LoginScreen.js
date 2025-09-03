@@ -56,85 +56,85 @@ const LoginScreen = () => {
 
 
 
-const loginHandle = () => {
-  if (!email || !password) {
-    Alert.alert('Validation Error', 'Please fill in all fields');
-    return;
-  }
+  const loginHandle = () => {
+    if (!email || !password) {
+      Alert.alert('Validation Error', 'Please fill in all fields');
+      return;
+    }
 
-  dispatch(loginUser({ email, password, role }))
-    .unwrap()
-    .then(async (res) => {
-      console.log('Login Success:', res.data.role);
+    dispatch(loginUser({ email, password, role }))
+      .unwrap()
+      .then(async (res) => {
+        console.log('Login Success:', res.data.role);
 
 
-      if(res.data.role === 'teacher') {
-        Alert.alert('Success', 'Login as teacher successfully ,Teacher verification pending', [
-          {
-            text: 'OK',
-            onPress: () => navigation.navigate('#'),
-          },
-        ]);
-        return
-      }
-
-      // On successful login, get the token from response
-      const token = res?.data?.token;
-
-      if (!token) {
-        Alert.alert('Error', 'Token not found after login');
-        return;
-      }
-
-      try {
-        // Call the profile API with the token to get user profile
-        const profileResponse = await fetch(
-          "http://31.97.206.49:3001/api/user/get/profile",
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
+        if (res.data.role === 'teacher') {
+          Alert.alert('Success', 'Login as teacher successfully ,Teacher verification pending', [
+            {
+              text: 'OK',
+              onPress: () => navigation.navigate('ProfileAuthTeacher'),
             },
+          ]);
+          return
+        }
+
+        // On successful login, get the token from response
+        const token = res?.data?.token;
+
+        if (!token) {
+          Alert.alert('Error', 'Token not found after login');
+          return;
+        }
+
+        try {
+          // Call the profile API with the token to get user profile
+          const profileResponse = await fetch(
+            "http://31.97.206.49:3001/api/user/get/profile",
+            {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+
+          console.log('Profile Response Status:', profileResponse);
+
+          if (!profileResponse.ok) {
+            throw new Error('Failed to fetch profile');
           }
-        );
 
-        console.log('Profile Response Status:', profileResponse);
+          const profileData = await profileResponse.json();
 
-        if (!profileResponse.ok) {
-          throw new Error('Failed to fetch profile');
+          console.log('Profile Data:', profileData);
+
+          // Check if QuranType exists and is not empty
+          const quranType = profileData?.data?.QuranType;
+
+          if (quranType && quranType.trim() !== '') {
+            Alert.alert('Success', 'Login successful', [
+              {
+                text: 'OK',
+                onPress: () => navigation.navigate('TabNavigation'),
+              },
+            ]);
+          } else {
+            Alert.alert('Success', 'Please complete your profile', [
+              {
+                text: 'OK',
+                onPress: () => navigation.navigate('ProfileAuth'),
+              },
+            ]);
+          }
+        } catch (error) {
+          Alert.alert('Error', error.message || 'Something went wrong while fetching profile');
         }
-
-        const profileData = await profileResponse.json();
-
-        console.log('Profile Data:', profileData);
-
-        // Check if QuranType exists and is not empty
-        const quranType = profileData?.data?.QuranType;
-
-        if (quranType && quranType.trim() !== '') {
-          Alert.alert('Success', 'Login successful', [
-            {
-              text: 'OK',
-              onPress: () => navigation.navigate('TabNavigation'),
-            },
-          ]);
-        } else {
-          Alert.alert('Success', 'Please complete your profile', [
-            {
-              text: 'OK',
-              onPress: () => navigation.navigate('ProfileAuth'),
-            },
-          ]);
-        }
-      } catch (error) {
-        Alert.alert('Error', error.message || 'Something went wrong while fetching profile');
-      }
-    })
-    .catch((err) => {
-      Alert.alert('Error', err?.message || 'Something went wrong during login');
-    });
-};
+      })
+      .catch((err) => {
+        Alert.alert('Error', err?.message || 'Something went wrong during login');
+      });
+  };
 
 
 
@@ -178,28 +178,28 @@ const loginHandle = () => {
 
 
 
-<View style={styles.roleContainer}>
-  <TouchableOpacity
-    style={[styles.roleBox, role === 'user' && styles.selectedRole]}
-    onPress={() => setRole('user')}
-  >
-    <Text style={styles.roleIcon}>🎓</Text>
-    <Text style={styles.roleText}>I’m a Student</Text>
-  </TouchableOpacity>
-  <TouchableOpacity
-    style={[styles.roleBox, role === 'teacher' && styles.selectedRole]}
-    onPress={() => setRole('teacher')}
-  >
-    {/* Replace emoji with Islamic teacher image */}
-    <Image
-      source={require('../../assets/images/teacher.png')} // Ensure you have this image in your assets
-      resizeMode="contain"
-      style={{ width: 40, height: 40, marginBottom: 8 }}
-    />
-    <Text style={styles.roleText}>I’m a Teacher</Text>
-  </TouchableOpacity>
-</View>
-      
+      <View style={styles.roleContainer}>
+        <TouchableOpacity
+          style={[styles.roleBox, role === 'user' && styles.selectedRole]}
+          onPress={() => setRole('user')}
+        >
+          <Text style={styles.roleIcon}>🎓</Text>
+          <Text style={styles.roleText}>I’m a Student</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.roleBox, role === 'teacher' && styles.selectedRole]}
+          onPress={() => setRole('teacher')}
+        >
+          {/* Replace emoji with Islamic teacher image */}
+          <Image
+            source={require('../../assets/images/teacher.png')} // Ensure you have this image in your assets
+            resizeMode="contain"
+            style={{ width: 40, height: 40, marginBottom: 8 }}
+          />
+          <Text style={styles.roleText}>I’m a Teacher</Text>
+        </TouchableOpacity>
+      </View>
+
 
       {/* Login Form */}
       <View style={styles.formBox}>
@@ -394,7 +394,7 @@ const styles = StyleSheet.create({
     color: '#6c8029',
     fontWeight: 'bold',
   },
-    selectedRole: {
+  selectedRole: {
     borderColor: '#6c8029',
     borderWidth: 2,
   },
