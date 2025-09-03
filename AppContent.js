@@ -68,6 +68,8 @@ import WorshipPlaces from './screens/worshipPlaces/WorshipPlaces';
 import HelpAndSupport from './screens/home/HelpAndSupport';
 
 import RecitationDetailsScreen from './screens/query/RecitationDetailsScreen';
+import ProfileAuthTeacher from './screens/profileAuth/ProfileAuthTeacher';
+import HomeTeacher from './screens/home/HomeTeacher';
 
 const Stack = createNativeStackNavigator();
 
@@ -82,7 +84,7 @@ function OnboardingStack() {
       }}>
       <Stack.Screen name="Splash" component={SplashScreen} />
       <Stack.Screen name="Onboarding" component={OnboardingScreen_1} />
-      
+
       <Stack.Screen name="Home" component={QuranScreen} />
       <Stack.Screen name="Login" component={LoginScreen} />
       <Stack.Screen name="SignUp" component={Signup} />
@@ -91,11 +93,12 @@ function OnboardingStack() {
       <Stack.Screen name="Otp_success" component={Otp_success} />
       <Stack.Screen name="email_submit_screen" component={EmailSubmitScreen} />
 
-            <Stack.Screen name="ProfileAuth" component={ProfileAuth} />
+      <Stack.Screen name="ProfileAuth" component={ProfileAuth} />
+      <Stack.Screen name="ProfileAuthTeacher" component={ProfileAuthTeacher} />
+      <Stack.Screen name="HomeTeacher" component={HomeTeacher} />
 
-
-          <Stack.Screen name="QueryTable" component={QueryTable} />
-          <Stack.Screen name="RecitationDetails" component={RecitationDetailsScreen} />
+      <Stack.Screen name="QueryTable" component={QueryTable} />
+      <Stack.Screen name="RecitationDetails" component={RecitationDetailsScreen} />
 
       <Stack.Screen name="Quran" component={QuranScreen} />
       <Stack.Screen name="Asatizah AI" component={AsatizahAIScreen} />
@@ -123,13 +126,13 @@ function OnboardingStack() {
       <Stack.Screen name='TasbihDhikir' component={TasbihDhikir} />
       <Stack.Screen name='HijrahCalendar' component={HijrahCalendar} />
       <Stack.Screen name='AddReminderHijrahCalendar' component={AddReminderHijrahCalendar} />
-      <Stack.Screen name='QiblaCompassScreen' component={QiblaCompassScreen} /> 
+      <Stack.Screen name='QiblaCompassScreen' component={QiblaCompassScreen} />
       <Stack.Screen name='AllFeaturesScreen' component={AllFeaturesScreen} />
       <Stack.Screen name='FeatureSettingsScreen' component={require('./screens/allFeatures/FeatureSettingsScreen').default} />
-      <Stack.Screen name='WorshipPlaces' component={WorshipPlaces} /> 
-       <Stack.Screen name="Donation" component={DonationTypeList} />
-      <Stack.Screen name='EventsList' component={EventsList} /> 
-      <Stack.Screen name='EventsDetails' component={EventsDetails} /> 
+      <Stack.Screen name='WorshipPlaces' component={WorshipPlaces} />
+      <Stack.Screen name="Donation" component={DonationTypeList} />
+      <Stack.Screen name='EventsList' component={EventsList} />
+      <Stack.Screen name='EventsDetails' component={EventsDetails} />
       <Stack.Screen name='EventScreen' component={EventScreen} />
       <Stack.Screen name='AllEventReminder' component={AllEventReminder} />
       <Stack.Screen name='ReminderDetailsScreen' component={ReminderDetailsScreen} />
@@ -161,7 +164,7 @@ const AppContent = () => {
       successColor="#BDFFDE"
       dangerColor="#FF3B30"
       warningColor="#FFCC00"
-      textStyle={{fontSize: 14, color: '#181B1F'}}>
+      textStyle={{ fontSize: 14, color: '#181B1F' }}>
       <LoadingProvider>
         <NavigationContainer>
           <OnboardingStack />
