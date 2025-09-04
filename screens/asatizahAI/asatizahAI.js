@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useRef, useState } from "react";
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import {
   Alert,
   Image,
@@ -12,12 +12,54 @@ import {
 } from "react-native";
 import { WebView } from "react-native-webview";
 
+import { useSelector } from "react-redux";
 import AudioRecorderUI from "./AudioRecorder";
 
 const AsatizahAIScreen = () => {
   const webviewRef = useRef(null);
   const [loaded, setLoaded] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
+
+  const [quranType, setQuranType] = useState(null);
+
+  const authUser = useSelector((state) => state.auth);
+  const token = authUser?.user?.token;
+  const userId = authUser?.user?._id;
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const headers = { "Content-Type": "application/json" };
+        if (token) headers.Authorization = `Bearer ${token}`;
+
+        const response = await fetch(
+          "http://31.97.206.49:3001/api/user/get/profile",
+          {
+            method: "GET",
+            headers,
+          }
+        );
+
+        if (response.ok) {
+          const json = await response.json();
+          if (json.data) {
+            const data = json.data;
+            console.log("Fetched profile data:", data.QuranType);
+            setQuranType(data.QuranType);
+          } else {
+            console.log("No profile found; please create your profile.");
+          }
+        } else {
+          console.log("Failed to fetch profile data.");
+        }
+      } catch (error) {
+        console.log("Network error while fetching profile.");
+      } finally {
+        console.log(false);
+      }
+    };
+    fetchProfile();
+  }, [token, userId]);
 
   const [surahName, setSurahName] = useState("");
   const [lineNo, setLineNo] = useState("");
@@ -37,6 +79,15 @@ const AsatizahAIScreen = () => {
       true;
     })();
   `;
+
+  // Determine the Quran URL based on the user's Quran type, with a default fallback URL
+  let quranurl = "https://app.quranflash.com/book/Warsh1?en#/reader/chapter/3"; // default URL
+
+  if (quranType === "Harf") {
+    quranurl = `https://app.quranflash.com/book/Tajweed?en#/reader/chapter/2`;
+  } else if (quranType === "Warf") {
+    quranurl = `https://app.quranflash.com/book/Warsh1?en#/reader/chapter/3`;
+  }
 
   useLayoutEffect(() => {
     if (loaded && webviewRef.current) {
@@ -79,7 +130,7 @@ const AsatizahAIScreen = () => {
       <View style={{ flex: 1 }}>
         <WebView
           ref={webviewRef}
-          source={{ uri: "https://app.quranflash.com/book/Warsh1?en#/reader/chapter/3" }}
+          source={{ uri: quranurl }}
           style={{ flex: 1 }}
           onLoadEnd={() => setLoaded(true)}
         />
@@ -88,13 +139,11 @@ const AsatizahAIScreen = () => {
           style={styles.absoluteButton}
           onPress={() => setModalVisible(true)}
         >
-
-
-      <Image
-           source={require('../../assets/images/recordmain.jpeg')} // Ensure you have this image in your assets
-           resizeMode="contain"
-           style={{ width: 60, height: 60, marginBottom: 8 }}
-         />
+          <Image
+            source={require('../../assets/images/recordmain.jpeg')} // Ensure you have this image in your assets
+            resizeMode="contain"
+            style={{ width: 60, height: 60, marginBottom: 8 }}
+          />
         </TouchableOpacity>
 
         <Modal
@@ -124,7 +173,6 @@ const AsatizahAIScreen = () => {
                 onChangeText={setSurahName}
                 placeholder="Surah number"
                 placeholderTextColor="#999"
-               
                 returnKeyType="done"
               />
 
@@ -240,8 +288,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     textAlign: "center",
   },
-
-  
 });
 
 export default AsatizahAIScreen;
