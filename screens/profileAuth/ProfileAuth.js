@@ -3,17 +3,14 @@ import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
   Alert,
-  Platform,
   ScrollView,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
-  View,
+  View
 } from "react-native";
-
-
-import RNPickerSelect from "react-native-picker-select";
+import DropDownPicker from "react-native-dropdown-picker";
 import { useSelector } from "react-redux";
 
 const languages = ["Hindi", "English", "French", "Urdu"];
@@ -35,26 +32,51 @@ const quranTypes = ["Harf", "Wrsh"];
 const ProfileAuth = () => {
   const token = useSelector((state) => state.auth.token);
   const { userId } = useSelector((state) => state?.auth?.user || {});
-
   const navigation = useNavigation();
 
-  const [form, setForm] = useState({
-    userId: userId || "",
-    language: "",
-    gender: "",
-    level: "",
-    QuranType: "",
-    dailyTime: "",
-    Age: 0,
-    contact: "", // renamed from ContactNumber
-    methodOfStudy: "",
-  });
+  // Dropdown states
+  const [language, setLanguage] = useState("");
+  const [languageOpen, setLanguageOpen] = useState(false);
+  const [languageItems, setLanguageItems] = useState(
+    languages.map((l) => ({ label: l, value: l }))
+  );
+
+  const [gender, setGender] = useState("");
+  const [genderOpen, setGenderOpen] = useState(false);
+  const [genderItems, setGenderItems] = useState(
+    genders.map((g) => ({ label: g.charAt(0).toUpperCase() + g.slice(1), value: g }))
+  );
+
+  const [level, setLevel] = useState("");
+  const [levelOpen, setLevelOpen] = useState(false);
+  const [levelItems, setLevelItems] = useState(levels.map((l) => ({ label: l, value: l })));
+
+  const [methodOfStudy, setMethodOfStudy] = useState([]);
+
+  console.log(methodOfStudy,"hello")
+  const [methodOpen, setMethodOpen] = useState(false);
+  const [methodItems, setMethodItems] = useState(
+    methodsOfStudy.map((m) => ({ label: m, value: m }))
+  );
+
+  const [quranType, setQuranType] = useState("");
+  const [quranTypeOpen, setQuranTypeOpen] = useState(false);
+  const [quranTypeItems, setQuranTypeItems] = useState(
+    quranTypes.map((q) => ({ label: q, value: q }))
+  );
+
+  const [dailyTime, setDailyTime] = useState("");
+  const [age, setAge] = useState("");
+  const [contact, setContact] = useState("");
 
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [fetching, setFetching] = useState(true);
 
-  // Normalize QuranType
+  // Utility helpers
+  const capitalizeFirstLetter = (string) =>
+    string ? string.charAt(0).toUpperCase() + string.slice(1) : "";
+
   const normalizeQuranType = (val) => {
     if (!val) return "";
     const lower = val.toLowerCase();
@@ -63,10 +85,22 @@ const ProfileAuth = () => {
     return "";
   };
 
-  // Capitalize helper
-  const capitalizeFirstLetter = (string) =>
-    string ? string.charAt(0).toUpperCase() + string.slice(1) : "";
+  // Close all dropdowns helper
+  const closeAllDropdowns = () => {
+    setLanguageOpen(false);
+    setGenderOpen(false);
+    setLevelOpen(false);
+    setMethodOpen(false);
+    setQuranTypeOpen(false);
+  };
 
+  // Sync dropdown open states, open only one at a time
+  const onOpen = (setter) => {
+    closeAllDropdowns();
+    setter(true);
+  };
+
+  // Fetch profile and initialize fields
   useEffect(() => {
     const fetchProfile = async () => {
       setFetching(true);
@@ -74,32 +108,29 @@ const ProfileAuth = () => {
         const headers = { "Content-Type": "application/json" };
         if (token) headers.Authorization = `Bearer ${token}`;
 
-        const response = await fetch(
-          "http://31.97.206.49:3001/api/user/get/profile",
-          {
-            method: "GET",
-            headers,
-          }
-        );
+        const response = await fetch("http://31.97.206.49:3001/api/user/get/profile", {
+          method: "GET",
+          headers,
+        });
 
         if (response.ok) {
           const json = await response.json();
           if (json.data) {
             const data = json.data;
-            console.log("Fetched profile data:", data);
-
-            setForm((prev) => ({
-              ...prev,
-              userId: userId || prev.userId,
-              language: capitalizeFirstLetter(data.language) || "",
-              gender: data.gender || "",
-              level: capitalizeFirstLetter(data.level) || "",
-              QuranType: normalizeQuranType(data.QuranType),
-              dailyTime: "",
-              Age: Number(data?.Age) || 0,
-              contact: data.contact || "", // renamed here
-              methodOfStudy: data.methodOfStudy || "",
-            }));
+            setLanguage(capitalizeFirstLetter(data.language) || "");
+            setGender(data.gender || "");
+            setLevel(capitalizeFirstLetter(data.level) || "");
+            setQuranType(normalizeQuranType(data.QuranType));
+            setDailyTime("");
+            setAge(data.Age ? String(data.Age) : "");
+            setContact(data.contact || "");
+            setMethodOfStudy(
+              Array.isArray(data.methodOfStudy)
+                ? data.methodOfStudy
+                : data.methodOfStudy
+                ? [data.methodOfStudy]
+                : []
+            );
             setMessage("");
           } else {
             setMessage("No profile found; please create your profile.");
@@ -114,25 +145,16 @@ const ProfileAuth = () => {
       }
     };
     fetchProfile();
-  }, [token, userId]);
+  }, [token]);
 
-  const handleChange = (field, value) => {
-    // Special handling for Age (convert to number or empty)
-    if (field === "Age") {
-      const numericValue = value.replace(/[^0-9]/g, ""); // keep only digits
-      setForm((prev) => ({ ...prev, Age: numericValue ? Number(numericValue) : 0 }));
-    } else {
-      setForm((prev) => ({ ...prev, [field]: value }));
-    }
-  };
-
+  // Submit handler
   const handleSubmit = async () => {
-    if (!form.language || !form.gender || !form.level || !form.methodOfStudy) {
-      Alert.alert("Validation Error", "Please fill all required fields.");
+    if (!language || !gender || !level || methodOfStudy.length === 0) {
+      Alert.alert("Validation Error", "Please fill all required fields including Method of Study.");
       return;
     }
-
-    if (form.Age <= 0) {
+    const ageNum = Number(age);
+    if (!ageNum || ageNum <= 0) {
       Alert.alert("Validation Error", "Please enter a valid age.");
       return;
     }
@@ -140,25 +162,35 @@ const ProfileAuth = () => {
     setLoading(true);
     setMessage("");
 
+    const form = {
+      userId: userId || "",
+      language,
+      gender,
+      level,
+      QuranType: quranType,
+      dailyTime,
+      Age: ageNum,
+      contact,
+      methodOfStudy,
+    };
+
+
+    console.log(form,"formform")
+
     try {
-      const headers = {
-        "Content-Type": "application/json",
-      };
+      const headers = { "Content-Type": "application/json" };
       if (token) headers.Authorization = `Bearer ${token}`;
 
-      const response = await fetch(
-        "http://31.97.206.49:3001/api/user/set/user/profile",
-        {
-          method: "POST",
-          headers,
-          body: JSON.stringify(form),
-        }
-      );
+      const response = await fetch("http://31.97.206.49:3001/api/user/set/user/profile", {
+        method: "POST",
+        headers,
+        body: JSON.stringify(form),
+      });
 
       if (response.ok) {
         await response.json();
         setMessage("Profile saved successfully!");
-        navigation.navigate('TabNavigation');
+        navigation.navigate("TabNavigation");
       } else {
         const errorData = await response.json();
         setMessage(`Error: ${errorData.message || "Failed to save profile"}`);
@@ -172,12 +204,7 @@ const ProfileAuth = () => {
 
   if (fetching) {
     return (
-      <View
-        style={[
-          styles.container,
-          { justifyContent: "center", alignItems: "center" },
-        ]}
-      >
+      <View style={[styles.container, { justifyContent: "center", alignItems: "center" }]}>
         <ActivityIndicator size="large" color="#007700" />
         <Text>Loading profile...</Text>
       </View>
@@ -187,11 +214,11 @@ const ProfileAuth = () => {
   return (
     <ScrollView
       contentContainerStyle={styles.container}
-      keyboardShouldPersistTaps="handled"
+      keyboardShouldPersistTaps="always"
+      nestedScrollEnabled={true}
     >
-      {/* Back Button */}
       <TouchableOpacity onPress={() => navigation.goBack()} style={{ marginBottom: 10 }}>
-        <Text style={{ color: '#007700', fontSize: 16 }}><Text>Back</Text> </Text>
+        <Text style={{ color: "#007700", fontSize: 16 }}>Back</Text>
       </TouchableOpacity>
 
       <Text style={styles.bismillah}>&#65017;</Text>
@@ -201,73 +228,102 @@ const ProfileAuth = () => {
         <View
           style={[
             styles.messageBox,
-            message.startsWith("Error")
-              ? styles.errorMessage
-              : styles.successMessage,
+            message.startsWith("Error") ? styles.errorMessage : styles.successMessage,
           ]}
         >
           <Text style={styles.messageText}>{message}</Text>
         </View>
       )}
 
-
-
-
       {/* Language */}
       <Text style={styles.label}>Language *</Text>
-      <PickerSelect
-        value={form.language}
-        onValueChange={(value) => handleChange("language", value)}
-        placeholder={{ label: "Select Language", value: "" }}
-        items={languages.map((l) => ({ label: l, value: l }))}
+      <DropDownPicker
+        open={languageOpen}
+        value={language}
+        items={languageItems}
+        setOpen={() => onOpen(setLanguageOpen)}
+        setValue={setLanguage}
+        setItems={setLanguageItems}
+        onClose={() => setLanguageOpen(false)}
+        placeholder="Select Language"
+        zIndex={5000}
+        zIndexInverse={6000}
+        multiple={false}
       />
 
       {/* Gender */}
       <Text style={styles.label}>Gender *</Text>
-      <PickerSelect
-        value={form.gender}
-        onValueChange={(value) => handleChange("gender", value)}
-        placeholder={{ label: "Select Gender", value: "" }}
-        items={genders.map((g) => ({
-          label: g.charAt(0).toUpperCase() + g.slice(1),
-          value: g,
-        }))}
+      <DropDownPicker
+        open={genderOpen}
+        value={gender}
+        items={genderItems}
+        setOpen={() => onOpen(setGenderOpen)}
+        setValue={setGender}
+        setItems={setGenderItems}
+        onClose={() => setGenderOpen(false)}
+        placeholder="Select Gender"
+        zIndex={4000}
+        zIndexInverse={7000}
+        multiple={false}
       />
 
       {/* Level */}
       <Text style={styles.label}>Level *</Text>
-      <PickerSelect
-        value={form.level}
-        onValueChange={(value) => handleChange("level", value)}
-        placeholder={{ label: "Select Level", value: "" }}
-        items={levels.map((l) => ({ label: l, value: l }))}
+      <DropDownPicker
+        open={levelOpen}
+        value={level}
+        items={levelItems}
+        setOpen={() => onOpen(setLevelOpen)}
+        setValue={setLevel}
+        setItems={setLevelItems}
+        onClose={() => setLevelOpen(false)}
+        placeholder="Select Level"
+        zIndex={3000}
+        zIndexInverse={8000}
+        multiple={false}
       />
 
       {/* Method of Study */}
       <Text style={styles.label}>Method of Study *</Text>
-      <PickerSelect
-        value={form.methodOfStudy}
-        onValueChange={(value) => handleChange("methodOfStudy", value)}
-        placeholder={{ label: "Select Method", value: "" }}
-        items={methodsOfStudy.map((m) => ({ label: m, value: m }))}
+      <DropDownPicker
+        open={methodOpen}
+        value={methodOfStudy}
+        items={methodItems}
+        setOpen={() => onOpen(setMethodOpen)}
+        setValue={setMethodOfStudy}
+        setItems={setMethodItems}
+        onClose={() => setMethodOpen(false)}
+        placeholder="Select Method(s) of Study"
+        multiple={true}
+        min={0}
+        mode="BADGE"
+        zIndex={2000}
+        zIndexInverse={9000}
       />
 
       {/* Quran Type */}
       <Text style={styles.label}>Quran Type</Text>
-      <PickerSelect
-        value={form.QuranType}
-        onValueChange={(value) => handleChange("QuranType", value)}
-        placeholder={{ label: "Select Quran Type", value: "" }}
-        items={quranTypes.map((q) => ({ label: q, value: q }))}
+      <DropDownPicker
+        open={quranTypeOpen}
+        value={quranType}
+        items={quranTypeItems}
+        setOpen={() => onOpen(setQuranTypeOpen)}
+        setValue={setQuranType}
+        setItems={setQuranTypeItems}
+        onClose={() => setQuranTypeOpen(false)}
+        placeholder="Select Quran Type"
+        zIndex={1000}
+        zIndexInverse={10000}
+        multiple={false}
       />
 
-      {/* Daily Time */}
+      {/* Daily Alarm */}
       <Text style={styles.label}>Daily Alarm</Text>
       <TextInput
         style={styles.input}
         placeholder="HH:mm"
-        value={form.dailyTime}
-        onChangeText={(text) => handleChange("dailyTime", text)}
+        value={dailyTime}
+        onChangeText={setDailyTime}
         keyboardType="numeric"
       />
 
@@ -276,8 +332,11 @@ const ProfileAuth = () => {
       <TextInput
         style={styles.input}
         placeholder="Enter your age"
-        value={form.Age ? String(form.Age) : ""}
-        onChangeText={(text) => handleChange("Age", text)}
+        value={age}
+        onChangeText={(text) => {
+          const numericText = text.replace(/[^0-9]/g, "");
+          setAge(numericText);
+        }}
         keyboardType="number-pad"
         maxLength={3}
       />
@@ -287,8 +346,8 @@ const ProfileAuth = () => {
       <TextInput
         style={styles.input}
         placeholder="Enter your contact number"
-        value={form.contact} // renamed here
-        onChangeText={(text) => handleChange("contact", text)} // renamed here
+        value={contact}
+        onChangeText={(text) => setContact(text)}
         keyboardType="number-pad"
         maxLength={15}
       />
@@ -299,32 +358,18 @@ const ProfileAuth = () => {
         disabled={loading}
         onPress={handleSubmit}
       >
-        {loading ? (
-          <ActivityIndicator color="#fff" />
-        ) : (
-          <Text style={styles.buttonText}>Save Profile</Text>
-        )}
+        {loading ? <ActivityIndicator color="#fff" /> : <Text style={styles.buttonText}>Save Profile</Text>}
       </TouchableOpacity>
     </ScrollView>
   );
 };
-
-const PickerSelect = ({ value, onValueChange, placeholder, items }) => (
-  <RNPickerSelect
-    onValueChange={onValueChange}
-    items={items}
-    placeholder={placeholder}
-    value={value}
-    style={pickerSelectStyles}
-    useNativeAndroidPickerStyle={false}
-  />
-);
 
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
     backgroundColor: "#f9fbf9",
     padding: 20,
+    paddingBottom: 40,
   },
   bismillah: {
     fontSize: 48,
@@ -354,6 +399,7 @@ const styles = StyleSheet.create({
     paddingLeft: 16,
     backgroundColor: "#fff",
     fontSize: 16,
+    marginBottom: 12,
   },
   button: {
     marginTop: 30,
@@ -381,30 +427,9 @@ const styles = StyleSheet.create({
   successMessage: {
     backgroundColor: "#d4edda",
   },
-});
-
-const pickerSelectStyles = StyleSheet.create({
-  inputIOS: {
+  messageText: {
+    color: "#333",
     fontSize: 16,
-    paddingVertical: 10,
-    paddingHorizontal: 16,
-    borderWidth: 1,
-    borderColor: "gray",
-    borderRadius: 24,
-    color: "black",
-    paddingRight: 30,
-    backgroundColor: "white",
-  },
-  inputAndroid: {
-    fontSize: 16,
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderWidth: 0.5,
-    borderColor: "purple",
-    borderRadius: 24,
-    color: "black",
-    paddingRight: 30,
-    backgroundColor: "white",
   },
 });
 
