@@ -16,7 +16,7 @@ const RecitationCard = ({ id, surah, status }) => {
             </Text>
             <View style={styles.calenderContainer}>
                 <Ionicons name={"calendar-number"} size={15} color={'black'} />
-                <Text style={styles.text}> 25-11-2025</Text>
+                <Text style={[styles.text, { fontStyle: 'italic' }]}> 25-11-2025</Text>
             </View>
         </View>
     );
@@ -25,11 +25,16 @@ const RecitationCard = ({ id, surah, status }) => {
 // define your styles
 const styles = StyleSheet.create({
     container: {
-        padding: 12,
+        backgroundColor: '#FFF',
+        padding: 15,
         borderWidth: 1,
         borderColor: '#ccc',
         borderRadius: 12,
         marginBottom: 15,
+        shadowColor: '#000',
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+        elevation: 2,
     },
     idContainer: {
         flexDirection: 'row',

@@ -6,27 +6,30 @@ import {
     StatusBar,
     Image,
     ImageBackground,
+    TouchableOpacity,
 } from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 
 
 const HomeTeacherHeader = () => {
     return (
-        <ImageBackground
-            source={{
-                uri: 'https://img.freepik.com/free-photo/abstract-blur-empty-green-gradient-studio-well-use-as-backgroundwebsite-templateframebusiness-report_1258-52607.jpg?semt=ais_incoming&w=740&q=80',
-            }}
-            style={styles.headerContainer}
-        >
-            <Text style={styles.title}>Teacher Dashboard</Text>
 
-            <View style={styles.bellContainer}>
-                <FontAwesome5 name={'bell'} size={22} color={"black"} />
-                <View style={styles.badge}>
-                    <Text style={styles.badgeText}>1</Text>
-                </View>
+        <View style={styles.headerContainer}>
+            <View style={styles.bgImgContainer}>
+                <Image source={require("../../assets/images/teacherHeaderbg.png")} style={styles.img} resizeMode='cover' />
             </View>
-        </ImageBackground>
+            <View style={styles.headerDetails}>
+                <Text style={styles.title}>Teacher Dashboard</Text>
+                <TouchableOpacity style={styles.bellContainer}>
+                    <FontAwesome5 name={'bell'} size={22} color={"black"} />
+                    <View style={styles.badge}>
+                        <Text style={styles.badgeText}>1</Text>
+                    </View>
+                </TouchableOpacity>
+            </View>
+        </View>
+
+
     );
 };
 
@@ -34,12 +37,12 @@ const styles = StyleSheet.create({
     headerContainer: {
         paddingTop: StatusBar.currentHeight,
         width: '100%',
-        height: 120,
+        height: 140,
         backgroundColor: '#1C4532',
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        paddingHorizontal: 16,
+        // paddingHorizontal: ,
     },
     title: {
         fontSize: 24,
@@ -75,6 +78,24 @@ const styles = StyleSheet.create({
         fontSize: 7,
         fontWeight: 'bold',
     },
+    bgImgContainer: {
+        width: '50%',
+        height: 140,
+        position: 'absolute',
+        right: 0
+    },
+    img: {
+        height: '100%',
+        width: '100%'
+    },
+    headerDetails: {
+        flexDirection: 'row',
+        alignSelf: 'flex-end',
+        justifyContent: 'space-between',
+        width: '100%',
+        paddingHorizontal: '5%',
+        paddingBottom: 10
+    }
 });
 
 export default HomeTeacherHeader;

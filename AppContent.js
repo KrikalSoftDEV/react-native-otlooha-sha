@@ -69,7 +69,7 @@ import HelpAndSupport from './screens/home/HelpAndSupport';
 
 import RecitationDetailsScreen from './screens/query/RecitationDetailsScreen';
 import ProfileAuthTeacher from './screens/profileAuth/ProfileAuthTeacher';
-import HomeTeacher from './screens/home/HomeTeacher';
+import TeacherTabNavigator from './navigation/TeacherTabNavigator'
 
 const Stack = createNativeStackNavigator();
 
@@ -89,13 +89,14 @@ function OnboardingStack() {
       <Stack.Screen name="Login" component={LoginScreen} />
       <Stack.Screen name="SignUp" component={Signup} />
       <Stack.Screen name="TabNavigation" component={TabNavigator} />
+      <Stack.Screen name="TeacherTabNavigator" component={TeacherTabNavigator} />
+
       <Stack.Screen name="SignUp_2" component={Signup_2} />
       <Stack.Screen name="Otp_success" component={Otp_success} />
       <Stack.Screen name="email_submit_screen" component={EmailSubmitScreen} />
 
       <Stack.Screen name="ProfileAuth" component={ProfileAuth} />
       <Stack.Screen name="ProfileAuthTeacher" component={ProfileAuthTeacher} />
-      <Stack.Screen name="HomeTeacher" component={HomeTeacher} />
 
       <Stack.Screen name="QueryTable" component={QueryTable} />
       <Stack.Screen name="RecitationDetails" component={RecitationDetailsScreen} />

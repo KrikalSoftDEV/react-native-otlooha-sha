@@ -35,6 +35,7 @@ const quranTypes = ["Harf", "Wrsh"];
 const ProfileAuthTeacher = () => {
     const token = useSelector((state) => state.auth.token);
     const { userId } = useSelector((state) => state?.auth?.user || {});
+    const { teacherId } = useSelector((state) => state?.auth?.user || {});
 
     const navigation = useNavigation();
 
@@ -42,12 +43,13 @@ const ProfileAuthTeacher = () => {
         userId: userId || "",
         language: "",
         gender: "",
-        level: "",
-        QuranType: "",
+        level: [],
+        QuranType: [],
         dailyTime: "",
         Age: 0,
         contact: "", // renamed from ContactNumber
-        methodOfStudy: "",
+        methodOfStudy: [],
+        teacherId: teacherId
     });
 
     const [loading, setLoading] = useState(false);
@@ -120,30 +122,46 @@ const ProfileAuthTeacher = () => {
     //     fetchProfile();
     // }, [token, userId]);
 
-    const handleChange = (field, value, multiple) => {
-        // Special handling for Age (convert to number or empty)
-        if (multiple) {
-            setForm((prev) => ({
-                ...prev,
-                [field]: value,   // <-- for multiple this will be an array
-            }));
-        }
-        else if (field === "Age") {
-            const numericValue = value.replace(/[^0-9]/g, ""); // keep only digits
-            setForm((prev) => ({ ...prev, Age: numericValue ? Number(numericValue) : 0 }));
-        } else {
-            setForm((prev) => ({ ...prev, [field]: value }));
-        }
+    const handleChange = (field, updaterOrValue, multiple = false) => {
+        setForm((prev) => {
+            let current = prev[field];
+
+            // Multiple select → always array
+            if (multiple) {
+                const base = Array.isArray(current) ? current : [];
+                const newValue =
+                    typeof updaterOrValue === "function"
+                        ? updaterOrValue(base)
+                        : updaterOrValue;
+
+                return { ...prev, [field]: newValue };
+            }
+
+            // Single select → resolve updater function OR direct value
+            const resolvedValue =
+                typeof updaterOrValue === "function"
+                    ? updaterOrValue(current ?? null)
+                    : updaterOrValue;
+
+            if (field === "Age") {
+                const numericValue = (resolvedValue || "")
+                    .toString()
+                    .replace(/[^0-9]/g, "");
+                return {
+                    ...prev,
+                    Age: numericValue ? Number(numericValue) : 0,
+                };
+            }
+
+            return { ...prev, [field]: resolvedValue };
+        });
     };
 
     const handleSubmit = async () => {
+        navigation.navigate("TeacherTabNavigator")
+        return
         if (!form.language || !form.gender || !form.level || !form.methodOfStudy) {
             Alert.alert("Validation Error", "Please fill all required fields.");
-            return;
-        }
-
-        if (form.Age <= 0) {
-            Alert.alert("Validation Error", "Please enter a valid age.");
             return;
         }
 
@@ -157,7 +175,7 @@ const ProfileAuthTeacher = () => {
             if (token) headers.Authorization = `Bearer ${token}`;
 
             const response = await fetch(
-                "http://31.97.206.49:3001/api/user/set/user/profile",
+                "http://31.97.206.49:3001/api/user/set/teacher/profile",
                 {
                     method: "POST",
                     headers,
@@ -168,8 +186,12 @@ const ProfileAuthTeacher = () => {
             if (response.ok) {
                 await response.json();
                 setMessage("Profile saved successfully!");
-                navigation.navigate('TabNavigation');
+                // navigation.navigate('TabNavigation');
+                navigation.navigate("TeacherTabNavigator")
+
             } else {
+                navigation.navigate("TeacherTabNavigator")
+                alert('Failed to save profile')
                 const errorData = await response.json();
                 setMessage(`Error: ${errorData.message || "Failed to save profile"}`);
             }
@@ -198,6 +220,7 @@ const ProfileAuthTeacher = () => {
         <ScrollView
             contentContainerStyle={styles.container}
             keyboardShouldPersistTaps="handled"
+            nestedScrollEnabled={true}
         >
             {/* Back Button */}
             {/* <TouchableOpacity onPress={() => navigation.goBack()} style={{ marginBottom: 10 }}>
@@ -227,11 +250,12 @@ const ProfileAuthTeacher = () => {
             <Text style={styles.label}>Languages</Text>
             <PickerSelect
                 value={form.language}
-                onValueChange={(value) => handleChange("language", value)}
+                onValueChange={(value) => handleChange("language", value, false)}
                 placeholder={"Select Language"}
                 items={languages.map((l) => ({ label: l, value: l }))}
                 open={languagesPicker}
                 setOpen={setLanguagesPicker}
+                multiple={false}
             />
 
             {/* Gender */}
@@ -252,12 +276,12 @@ const ProfileAuthTeacher = () => {
             <Text style={[styles.label, { marginTop: genderPicker ? 155 : 30 }]}>Level *</Text>
             <PickerSelect
                 value={form.level}
-                onValueChange={(value) => handleChange("level", value)}
+                onValueChange={(value) => handleChange("level", value, true)}
                 placeholder={"Select Level"}
                 items={levels.map((l) => ({ label: l, value: l }))}
                 open={levelPicker}
                 setOpen={setLevelPicker}
-            // multiple={true}
+                multiple={true}
             />
 
             {/* Method of Study */}
@@ -265,24 +289,24 @@ const ProfileAuthTeacher = () => {
             <PickerSelect
 
                 value={form.methodOfStudy}
-                onValueChange={(value) => handleChange("methodOfStudy", value)}
+                onValueChange={(value) => handleChange("methodOfStudy", value, true)}
                 placeholder={"Select Method"}
                 items={methodsOfStudy.map((m) => ({ label: m, value: m }))}
                 open={mehodPicker}
                 setOpen={setMethodPicker}
-            // multiple={true}
+                multiple={true}
             />
 
             {/* Quran Type */}
             <Text style={[styles.label, { marginTop: mehodPicker ? 230 : 30 }]}>Quran Type</Text>
             <PickerSelect
                 value={form.QuranType}
-                onValueChange={(value) => handleChange("QuranType", value)}
+                onValueChange={(value) => handleChange("QuranType", value, true)}
                 placeholder={"Select Quran Type"}
                 items={quranTypes.map((q) => ({ label: q, value: q }))}
                 open={typePicker}
                 setOpen={setTypePicker}
-            // multiple={true}
+                multiple={true}
             />
 
 
@@ -290,10 +314,8 @@ const ProfileAuthTeacher = () => {
             <TouchableOpacity
                 style={[styles.button, { marginTop: typePicker ? 130 : 50 }, loading && styles.buttonDisabled]}
                 disabled={loading}
-                // onPress={handleSubmit}
-                onPress={() => {
-                    navigation.navigate("HomeTeacher")
-                }}
+                onPress={handleSubmit}
+
             >
                 {loading ? (
                     <ActivityIndicator color="#fff" />
@@ -305,54 +327,45 @@ const ProfileAuthTeacher = () => {
     );
 };
 
-const PickerSelect = ({ value, onValueChange, placeholder, items, open, setOpen, multiple = false, }) => (
+const PickerSelect = ({ value, onValueChange, placeholder, items, open, setOpen, multiple = false, }) => {
+    return (
+        <>
+            <DropDownPicker
+                multiple={multiple}
+                open={open}
+                value={multiple ? (Array.isArray(value) ? value : []) : value}
+                items={items}
+                setOpen={setOpen}
+                min={0}
+                max={5}
+                listMode="SCROLLVIEW"
+                setValue={onValueChange}
+                dropDownDirection='BOTTOM'
+                placeholder={placeholder}
+                placeholderStyle={{ color: '#C3CAD6', fontSize: 15 }}
+                textStyle={{ color: 'black', fontSize: 15 }}
+                style={{
+                    borderRadius: 8,
+                    paddingLeft: 15,
+                    backgroundColor: 'white',
+                    borderWidth: 1,
+                    height: 30,
+                    borderColor: '#DDE2EB',
+                }}
+                listItemLabelStyle={{ color: '#686E7A', fontSize: 15 }}
+                selectedItemLabelStyle={{ color: 'black', fontSize: 15 }}
+                dropDownContainerStyle={{
+                    borderRadius: 10,
+                    borderWidth: 1,
+                    borderColor: '#DDE2EB',
+                    backgroundColor: 'white',
 
-    <>
+                }}
+                zIndex={5000}
+                zIndexInverse={1000}
+            />
 
-        <DropDownPicker
-            multiple={false}
-            open={open}
-            value={multiple ? (Array.isArray(value) ? value : []) : value}
-            items={items}
-            setOpen={setOpen}
-            min={0}
-            max={5}
-            setValue={(param) => {
-                const safeValue = multiple ? (Array.isArray(value) ? value : []) : value;
-                const next = typeof param === "function" ? param(safeValue) : param;
-                // Ensure next is an array when multiple is true
-                const finalNext = multiple ? (Array.isArray(next) ? next : []) : next;
-                onValueChange(finalNext);
-            }}
-            // multipleText={value.map(v => value.find(m => m === v))
-            //     .join(", ")
-            // }
-            dropDownDirection='BOTTOM'
-            placeholder={placeholder}
-            placeholderStyle={{ color: '#C3CAD6', fontSize: 15 }}
-            textStyle={{ color: 'black', fontSize: 15 }}
-            style={{
-                borderRadius: 8,
-                paddingLeft: 15,
-                backgroundColor: 'white',
-                borderWidth: 1,
-                height: 30,
-                borderColor: '#DDE2EB',
-            }}
-            listItemLabelStyle={{ color: '#686E7A', fontSize: 15 }}
-            selectedItemLabelStyle={{ color: 'black', fontSize: 15 }}
-            dropDownContainerStyle={{
-                borderRadius: 10,
-                borderWidth: 1,
-                borderColor: '#DDE2EB',
-                backgroundColor: 'white',
-
-            }}
-            zIndex={5000}
-            zIndexInverse={1000}
-        />
-
-        {/* <RNPickerSelect
+            {/* <RNPickerSelect
         onValueChange={onValueChange}
         items={items}
         placeholder={placeholder}
@@ -360,8 +373,9 @@ const PickerSelect = ({ value, onValueChange, placeholder, items, open, setOpen,
         style={pickerSelectStyles}
         useNativeAndroidPickerStyle={false}
     /> */}
-    </>
-);
+        </>
+    )
+};
 
 const styles = StyleSheet.create({
     container: {

@@ -65,19 +65,7 @@ const LoginScreen = () => {
     dispatch(loginUser({ email, password, role }))
       .unwrap()
       .then(async (res) => {
-        console.log('Login Success:', res.data.role);
-
-
-        if (res.data.role === 'teacher') {
-          Alert.alert('Success', 'Login as teacher successfully ,Teacher verification pending', [
-            {
-              text: 'OK',
-              onPress: () => navigation.navigate('ProfileAuthTeacher'),
-            },
-          ]);
-          return
-        }
-
+        console.log('Login Success:', res.data.role, res.data.teacherId);
         // On successful login, get the token from response
         const token = res?.data?.token;
 
@@ -85,6 +73,59 @@ const LoginScreen = () => {
           Alert.alert('Error', 'Token not found after login');
           return;
         }
+
+        if (res.data.role === 'teacher') {
+          try {
+            // Call the profile API with the token to get user profile
+            const profileResponse = await fetch(
+              "http://31.97.206.49:3001/api/user/set/teacher/profile",
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify({ teacherId: res?.data?.teacherId })
+              }
+            );
+
+            console.log('Profile Response Status:', profileResponse);
+
+            if (!profileResponse.ok) {
+              throw new Error('Failed to fetch profile');
+            }
+
+            const profileData = await profileResponse.json();
+
+            console.log('Profile Data:', profileData);
+
+            // Check if QuranType exists and is not empty
+            const quranType = profileData?.data?.QuranType;
+
+            if (quranType && quranType.trim() !== '') {
+              Alert.alert('Success', 'Login successful', [
+                {
+                  text: 'OK',
+                  onPress: () => navigation.navigate("HomeTeacher")
+
+                },
+              ]);
+            } else {
+              Alert.alert('Success', 'Login as teacher successfully ,Teacher verification pending', [
+                {
+                  text: 'OK',
+                  onPress: () => navigation.navigate('ProfileAuthTeacher'),
+                },
+              ]);
+            }
+          } catch (error) {
+            Alert.alert('Error', error.message || 'Something went wrong while fetching profile');
+          }
+
+          return
+        }
+
+
 
         try {
           // Call the profile API with the token to get user profile
@@ -254,7 +295,10 @@ const LoginScreen = () => {
       {/* Guest Login Button */}
       <TouchableOpacity
         style={[styles.loginBtn, { backgroundColor: '#aaa', marginTop: 10 }]}
-        onPress={loginAsGuestHandler}
+        // onPress={loginAsGuestHandler}
+        onPress={() => {
+          navigation.navigate('TeacherTabNavigator')
+        }}
       >
         <Text style={styles.loginBtnText}>Continue as Guest</Text>
       </TouchableOpacity>

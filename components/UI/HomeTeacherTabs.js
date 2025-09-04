@@ -42,6 +42,11 @@ const styles = StyleSheet.create({
         height: 72,
         borderWidth: 1,
         borderColor: '#ccc',
+        backgroundColor: '#FFF',
+        shadowColor: '#000',
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+        elevation: 2,
     },
     reciteInnerWrapper: {
         flexDirection: 'row',
@@ -67,6 +72,11 @@ const styles = StyleSheet.create({
         height: 72,
         borderWidth: 1,
         borderColor: '#ccc',
+        backgroundColor: '#FFF',
+        shadowColor: '#000',
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+        elevation: 2,
     },
     innerWrapper: {
         flexDirection: 'row',

@@ -13,9 +13,9 @@ import { useToast } from 'react-native-toast-notifications';
 import About from '../../assets/images/Common/about.svg';
 import FeaturesSetting from '../../assets/images/Common/featuressettings.svg';
 
- 
+
 import ForwardIcon from '../../assets/images/Common/forwardicon.svg';
- 
+
 import { useFocusEffect, useIsFocused } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import LanguageIcon from '../../assets/images/Common/languageicon.svg';
@@ -41,7 +41,7 @@ import ProfileHeaderSection from './ProfileHeaderSection';
 const ProfileScreen = props => {
   const isFocused = useIsFocused();
   const dispatch = useDispatch();
-const [fullNameCustom, setFullNameCustom] = useState('');
+  const [fullNameCustom, setFullNameCustom] = useState('');
 
   const toast = useToast();
   const {
@@ -53,59 +53,59 @@ const [fullNameCustom, setFullNameCustom] = useState('');
   } = useLoading();
 
 
-    const authUser = useSelector((state) => state.auth);
+  const authUser = useSelector((state) => state.auth);
 
-    console.log(fullNameCustom, "fullNameCustom")
+  console.log(fullNameCustom, "fullNameCustom")
 
-    console.log("authUser", authUser?.user?.token);
+  console.log("authUser", authUser?.user?.token);
 
-    const token = authUser?.user?.token;
-    const userId = authUser?.user?._id;
-
-
+  const token = authUser?.user?.token;
+  const userId = authUser?.user?._id;
 
 
-    useEffect(() => {
-        const fetchProfile = async () => {
-          try {
-            const headers = { "Content-Type": "application/json" };
-            if (token) headers.Authorization = `Bearer ${token}`;
-    
-            const response = await fetch(
-              "http://31.97.206.49:3001/api/user/get/profile",
-              {
-                method: "GET",
-                headers,
-              }
-            );
-    
-            if (response.ok) {
-              const json = await response.json();
-              if (json.data) {
-                const data = json.data;
-                console.log("Fetched profile data:", data);
 
-                setFullNameCustom(data.firstName + " " + data.lastName);
 
-    
-                
-              } else {
-                console.log("No profile found; please create your profile.");
-              }
-            } else {
-              console.log("Failed to fetch profile data.");
-            }
-          } catch (error) {
-            console.log("Network error while fetching profile.");
-          } finally {
-            console.log(false);
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const headers = { "Content-Type": "application/json" };
+        if (token) headers.Authorization = `Bearer ${token}`;
+
+        const response = await fetch(
+          "http://31.97.206.49:3001/api/user/get/profile",
+          {
+            method: "GET",
+            headers,
           }
-        };
-        fetchProfile();
-      }, [token, userId]);
+        );
+
+        if (response.ok) {
+          const json = await response.json();
+          if (json.data) {
+            const data = json.data;
+            console.log("Fetched profile data:", data);
+
+            setFullNameCustom(data.firstName + " " + data.lastName);
 
 
-    
+
+          } else {
+            console.log("No profile found; please create your profile.");
+          }
+        } else {
+          console.log("Failed to fetch profile data.");
+        }
+      } catch (error) {
+        console.log("Network error while fetching profile.");
+      } finally {
+        console.log(false);
+      }
+    };
+    fetchProfile();
+  }, [token, userId]);
+
+
+
 
 
   const userInfo = useSelector(state => state.app.userInfo);
@@ -322,7 +322,7 @@ const [fullNameCustom, setFullNameCustom] = useState('');
 
           {renderMenuItem(
 
-            
+
             <FeaturesSetting size={20} color="#6B7280" />,
             'Help & Support',
             'FAQs, Contact us & More',

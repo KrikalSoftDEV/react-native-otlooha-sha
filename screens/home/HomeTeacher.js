@@ -5,10 +5,14 @@ import { SafeAreaView, View, Text, StyleSheet, Image, ImageBackground, StatusBar
 import HomeTeacherHeader from '../../components/UI/HomeTeacherHeader';
 import HomeTeacherTabs from '../../components/UI/HomeTeacherTabs';
 import RecitationCard from '../../components/UI/RecitationCard';
+import { useIsFocused } from '@react-navigation/native';
 
 const HomeTeacher = () => {
+    const isFocused = useIsFocused()
     return (
-        <SafeAreaView>
+        <View>
+            {isFocused && <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />}
+
             <HomeTeacherHeader />
             <View style={styles.container}>
                 <HomeTeacherTabs />
@@ -17,7 +21,7 @@ const HomeTeacher = () => {
                 <RecitationCard id="5" surah="Demo Surah Name" status="Re-Recorded" />
 
             </View>
-        </SafeAreaView>
+        </View>
     );
 };
 
